@@ -3,164 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Copy Studio</title>
+<title>AI Copy Studio PRO</title>
 
 <style>
-body{
-  margin:0;
-  font-family:Arial;
-  background:#0f172a;
-  color:white;
+body{margin:0;font-family:Arial;background:#0f172a;color:white}
+.container{max-width:600px;margin:auto;padding:20px}
+h1{text-align:center;color:#38bdf8}
+input,select,button{
+  width:100%;padding:12px;margin-top:10px;
+  border-radius:8px;border:none;box-sizing:border-box
 }
-
-.container{
-  max-width:650px;
-  margin:auto;
-  padding:20px;
-}
-
-h1{
-  text-align:center;
-  color:#38bdf8;
-}
-
-.lang{
-  text-align:center;
-  margin-bottom:15px;
-}
-
-.lang button{
-  padding:8px 12px;
-  margin:3px;
-  border:none;
-  border-radius:6px;
-  cursor:pointer;
-}
-
-.card{
-  background:#1e293b;
-  padding:20px;
-  border-radius:12px;
-}
-
-label{
-  display:block;
-  margin-top:15px;
-  opacity:0.8;
-}
-
-input,select{
-  width:100%;
-  padding:12px;
-  margin-top:5px;
-  border-radius:8px;
-  border:1px solid #334155;
-  background:#020617;
-  color:white;
-  box-sizing:border-box;
-}
-
-button.generate{
-  width:100%;
-  margin-top:20px;
-  padding:12px;
-  background:#3b82f6;
-  border:none;
-  border-radius:8px;
-  color:white;
-  font-weight:bold;
-  cursor:pointer;
-}
-
-button.generate:hover{
-  background:#2563eb;
-}
-
-.output{
-  margin-top:20px;
-  background:#020617;
-  padding:15px;
-  border-radius:10px;
-  min-height:120px;
-  white-space:pre-line;
-}
+input,select{background:#020617;color:white}
+button{background:#3b82f6;color:white;font-weight:bold}
+.output{margin-top:20px;background:#020617;padding:15px;border-radius:10px;min-height:120px}
 </style>
 </head>
 
 <body>
 
 <div class="container">
+<h1>🧠 AI Copy Studio PRO</h1>
 
-<h1 id="title">AI Copy Studio</h1>
+<input id="product" placeholder="Product">
+<input id="audience" placeholder="Audience">
 
-<div class="lang">
-  <button onclick="setLang('en')">EN</button>
-  <button onclick="setLang('fr')">FR</button>
-  <button onclick="setLang('ar')">AR</button>
-</div>
-
-<div class="card">
-
-<label id="labelProduct">Product / Service</label>
-<input id="product" placeholder="Ex: bracelet">
-
-<label id="labelAudience">Target Audience</label>
-<input id="audience" placeholder="Ex: women 20-35">
-
-<label id="labelTone">Tone</label>
 <select id="tone">
   <option value="luxury">Luxury</option>
   <option value="friendly">Friendly</option>
   <option value="persuasive">Persuasive</option>
 </select>
 
-<button class="generate" onclick="generate()">Generate</button>
+<button onclick="generate()">Generate AI</button>
 
 <div class="output" id="output">Result...</div>
-
-</div>
 </div>
 
 <script>
-
-function setLang(lang){
-
-  const t = {
-    en:{
-      title:"AI Copy Studio",
-      product:"Product / Service",
-      audience:"Target Audience",
-      tone:"Tone",
-      p1:"Ex: bracelet",
-      p2:"Ex: women 20-35"
-    },
-    fr:{
-      title:"Studio IA Texte",
-      product:"Produit / Service",
-      audience:"Public cible",
-      tone:"Ton",
-      p1:"Ex: bracelet",
-      p2:"Ex: femmes 20-35"
-    },
-    ar:{
-      title:"مولّد نصوص ذكي",
-      product:"المنتج / الخدمة",
-      audience:"الفئة المستهدفة",
-      tone:"النمط",
-      p1:"مثال: سوار",
-      p2:"مثال: نساء 20-35"
-    }
-  };
-
-  document.getElementById("title").innerText = t[lang].title;
-  document.getElementById("labelProduct").innerText = t[lang].product;
-  document.getElementById("labelAudience").innerText = t[lang].audience;
-  document.getElementById("labelTone").innerText = t[lang].tone;
-  document.getElementById("product").placeholder = t[lang].p1;
-  document.getElementById("audience").placeholder = t[lang].p2;
-}
-
-function generate(){
+async function generate(){
 
   let product=document.getElementById("product").value;
   let audience=document.getElementById("audience").value;
@@ -172,23 +51,24 @@ function generate(){
     return;
   }
 
-  let text="";
+  output.innerHTML="🤖 AI thinking...";
 
-  if(tone==="luxury"){
-    text="✨ "+product+" designed for "+audience+". Premium quality and elegant style.";
+  try{
+    const res = await fetch("/.netlify/functions/ai", {
+      method:"POST",
+      headers:{
+        "Content-Type":"application/json"
+      },
+      body: JSON.stringify({ product, audience, tone })
+    });
+
+    const data = await res.json();
+
+    output.innerHTML = data.result || "Error AI";
+  }catch(e){
+    output.innerHTML = "❌ Error connecting to AI";
   }
-
-  if(tone==="friendly"){
-    text="😊 Meet "+product+"! Perfect for "+audience+". Simple and useful.";
-  }
-
-  if(tone==="persuasive"){
-    text="🔥 Don't miss "+product+"! Ideal for "+audience+". Order now!";
-  }
-
-  output.innerHTML=text;
 }
-
 </script>
 
 </body>
