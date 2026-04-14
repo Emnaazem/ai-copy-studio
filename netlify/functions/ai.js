@@ -1,4 +1,3 @@
-
 exports.handler = async (event) => {
 
   try {
