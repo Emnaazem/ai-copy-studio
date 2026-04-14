@@ -28,8 +28,7 @@ Tone: ${tone}`;
     return {
       statusCode: 200,
       body: JSON.stringify({
-        result: data[0]?.generated_text || JSON.stringify(data)
-      })
+result: JSON.stringify(data)      })
     };
 
   } catch (e) {
