@@ -1,199 +1,54 @@
-<!DOCTYPE html>
-<html lang="en">
-<head>
-<meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Copy Studio</title>
-
-<style>
-body {
-  margin: 0;
-  font-family: Arial, sans-serif;
-  background: #0f172a;
-  color: white;
-}
-
-.container {
-  max-width: 600px;
-  margin: auto;
-  padding: 20px;
-}
-
-h1 {
-  text-align: center;
-  color: #38bdf8;
-}
-
-.card {
-  background: #1e293b;
-  padding: 20px;
-  border-radius: 12px;
-}
-
-/* FIX INPUTS */
-.field {
-  margin-top: 15px;
-}
-
-label {
-  display: block;
-  margin-bottom: 5px;
-  font-size: 14px;
-  opacity: 0.8;
-}
-
-input, select {
-  width: 100%;
-  padding: 12px;
-  border-radius: 8px;
-  border: 1px solid #334155;
-  background: #020617;
-  color: white;
-  box-sizing: border-box;
-}
-
-/* BUTTON */
-button {
-  margin-top: 20px;
-  padding: 12px;
-  width: 100%;
-  border: none;
-  background: #3b82f6;
-  color: white;
-  border-radius: 8px;
-  cursor: pointer;
-  font-weight: bold;
-}
-
-button:hover {
-  background: #2563eb;
-}
-
-/* OUTPUT */
-.output {
-  margin-top: 20px;
-  background: #020617;
-  padding: 15px;
-  border-radius: 10px;
-  min-height: 120px;
-  white-space: pre-line;
-}
-
-/* ACTIONS */
-.actions {
-  display: flex;
-  gap: 10px;
-  margin-top: 10px;
-}
-
-.actions button {
-  flex: 1;
-}
-
-.loading {
-  color: #38bdf8;
-}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-  <h1>🧠 AI Copy Studio</h1>
-
-  <div class="card">
-
-    <div class="field">
-      <label>Product / Service</label>
-      <input id="product" placeholder="Ex: bracelet">
-    </div>
-
-    <div class="field">
-      <label>Target Audience</label>
-      <input id="audience" placeholder="Ex: women 20-35">
-    </div>
-
-    <div class="field">
-      <label>Tone</label>
-      <select id="tone">
-        <option value="luxury">Luxury</option>
-        <option value="friendly">Friendly</option>
-        <option value="persuasive">Persuasive</option>
-      </select>
-    </div>
-
-    <button onclick="generate()">Generate</button>
-
-    <div class="output" id="output">
-      Your AI result will appear here...
-    </div>
-
-    <div class="actions">
-      <button onclick="copyText()">Copy</button>
-      <button onclick="clearText()">Clear</button>
-    </div>
-
-  </div>
-</div>
-
 <script>
 let lastResult = "";
 
 function generate() {
-  const product = document.getElementById("product").value;
-  const audience = document.getElementById("audience").value;
-  const tone = document.getElementById("tone").value;
-  const output = document.getElementById("output");
+  try {
+    const product = document.getElementById("product").value;
+    const audience = document.getElementById("audience").value;
+    const tone = document.getElementById("tone").value;
+    const output = document.getElementById("output");
 
-  if (!product || !audience) {
-    output.innerHTML = "⚠️ Please fill all fields.";
-    return;
+    if (!product || !audience) {
+      output.innerHTML = "⚠️ Please fill all fields.";
+      return;
+    }
+
+    output.innerHTML = "🤖 Generating...";
+
+    setTimeout(() => {
+      let text = "";
+
+      if (tone === "luxury") {
+        text = "✨ Discover " + product + ", crafted for " + audience +
+        ". Premium quality and elegant design.";
+      }
+
+      else if (tone === "friendly") {
+        text = "😊 Meet your new favorite " + product +
+        "! Perfect for " + audience + ".";
+      }
+
+      else if (tone === "persuasive") {
+        text = "🔥 Don't miss out! This " + product +
+        " is perfect for " + audience + ". Order now!";
+      }
+
+      output.innerHTML = text;
+      lastResult = text;
+    }, 1000);
+
+  } catch (error) {
+    document.getElementById("output").innerHTML = "❌ Error in script";
+    console.log(error);
   }
-
-  output.innerHTML = "<span class='loading'>🤖 Generating...</span>";
-
-  setTimeout(() => {
-    let text = "";
-
-    if (tone === "luxury") {
-      text = `✨ Discover ${product}, crafted for ${audience}.
-Premium quality, elegant design, and a true luxury experience.
-
-Perfect for those who want style and excellence.`;
-    }
-
-    if (tone === "friendly") {
-      text = `😊 Meet your new favorite ${product}!
-
-Designed for ${audience}, simple, useful, and perfect for everyday life.
-
-Try it today!`;
-    }
-
-    if (tone === "persuasive") {
-      text = `🔥 Don't miss out!
-
-This ${product} is perfect for ${audience}.
-High quality, great value, and loved by many.
-
-👉 Order now!`;
-    }
-
-    output.innerHTML = text;
-    lastResult = text;
-  }, 1000);
 }
 
 function copyText() {
   if (!lastResult) return;
   navigator.clipboard.writeText(lastResult);
-  alert("Copied!");
 }
 
 function clearText() {
-  document.getElementById("output").innerHTML = "Cleared.";
+  document.getElementById("output").innerHTML = "";
 }
 </script>
-
-</body>
-</html>
