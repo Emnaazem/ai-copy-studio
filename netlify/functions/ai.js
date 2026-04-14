@@ -10,7 +10,7 @@ Audience: ${audience}
 Tone: ${tone}`;
 
     const response = await fetch(
-      "https://api-inference.huggingface.co/models/tiiuae/falcon-7b-instruct",
+      "https://router.huggingface.co/hf-inference/models/tiiuae/falcon-7b-instruct",
       {
         method: "POST",
         headers: {
@@ -28,7 +28,8 @@ Tone: ${tone}`;
     return {
       statusCode: 200,
       body: JSON.stringify({
-result: JSON.stringify(data)      })
+        result: data[0]?.generated_text || JSON.stringify(data)
+      })
     };
 
   } catch (e) {
