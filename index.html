@@ -3,73 +3,43 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>AI Copy Studio PRO</title>
+<title>AI Copy Studio</title>
 
 <style>
-body{margin:0;font-family:Arial;background:#0f172a;color:white}
-.container{max-width:600px;margin:auto;padding:20px}
-h1{text-align:center;color:#38bdf8}
+body{
+  margin:0;
+  font-family:Arial;
+  background:#0f172a;
+  color:white;
+}
+.container{
+  max-width:600px;
+  margin:auto;
+  padding:20px;
+}
+h1{
+  text-align:center;
+  color:#38bdf8;
+}
 input,select,button{
-  width:100%;padding:12px;margin-top:10px;
-  border-radius:8px;border:none;box-sizing:border-box
+  width:100%;
+  padding:12px;
+  margin-top:10px;
+  border-radius:8px;
+  border:none;
+  box-sizing:border-box;
 }
-input,select{background:#020617;color:white}
-button{background:#3b82f6;color:white;font-weight:bold}
-.output{margin-top:20px;background:#020617;padding:15px;border-radius:10px;min-height:120px}
-</style>
-</head>
-
-<body>
-
-<div class="container">
-<h1>🧠 AI Copy Studio PRO</h1>
-
-<input id="product" placeholder="Product">
-<input id="audience" placeholder="Audience">
-
-<select id="tone">
-  <option value="luxury">Luxury</option>
-  <option value="friendly">Friendly</option>
-  <option value="persuasive">Persuasive</option>
-</select>
-
-<button onclick="generate()">Generate AI</button>
-
-<div class="output" id="output">Result...</div>
-</div>
-
-<script>
-async function generate(){
-
-  let product=document.getElementById("product").value;
-  let audience=document.getElementById("audience").value;
-  let tone=document.getElementById("tone").value;
-  let output=document.getElementById("output");
-
-  if(!product || !audience){
-    output.innerHTML="⚠️ Fill all fields";
-    return;
-  }
-
-  output.innerHTML="🤖 AI thinking...";
-
-  try{
-    const res = await fetch("/.netlify/functions/ai", {
-      method:"POST",
-      headers:{
-        "Content-Type":"application/json"
-      },
-      body: JSON.stringify({ product, audience, tone })
-    });
-
-    const data = await res.json();
-
-    output.innerHTML = data.result || "Error AI";
-  }catch(e){
-    output.innerHTML = "❌ Error connecting to AI";
-  }
+input,select{
+  background:#020617;
+  color:white;
 }
-</script>
-
-</body>
-</html>
+button{
+  background:#3b82f6;
+  color:white;
+  font-weight:bold;
+  cursor:pointer;
+}
+.output{
+  margin-top:20px;
+  background:#020617;
+  padding:15
